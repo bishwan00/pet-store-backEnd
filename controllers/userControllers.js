@@ -2,6 +2,7 @@ import User from "../models/usermodels.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import customError from "../utilts/customError.js";
+import { tryCatch } from "../utilts/tryCatch.js";
 
 export const signup = async (req, res) => {
   try {
@@ -11,15 +12,14 @@ export const signup = async (req, res) => {
   }
 };
 
-export const getUser = async (req, res) => {
-  try {
-    const user = await User.find();
+export const getUser = tryCatch(async (req, res) => {
+  const user = await User.find();
 
-    res.status(201).json({ status: "success", data: user });
-  } catch (err) {
-    res.status(400).json({ status: "error", message: err.message });
+  if (!user) {
+    throw new customError("no users found", 400);
   }
-};
+  res.status(201).json({ status: "success", data: user });
+});
 
 export const login = (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
