@@ -1,6 +1,7 @@
 import User from "../models/usermodels.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import customError from "../utilts/customError.js";
 
 export const signup = async (req, res) => {
   try {
@@ -24,9 +25,8 @@ export const login = (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     try {
       if (err || !user) {
-        const error = new Error("no user found");
-        next(error);
-        return;
+        //throw yaksar acheta patchaka
+        throw new customError("no user found", 404);
       }
       req.login(user, { session: false }, async (error) => {
         if (error) return next(error);
@@ -37,7 +37,9 @@ export const login = (req, res, next) => {
         });
         res.json({ token });
       });
-    } catch (err) {}
+    } catch (err) {
+      next(err);
+    }
   })(req, res, next);
 };
 
