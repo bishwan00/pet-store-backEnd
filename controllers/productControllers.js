@@ -7,7 +7,7 @@ export const getProducts = async (req, res) => {
     let query = JSON.stringify(req.query);
 
     //ama bo awaya la req.query kaya bysrynawa boy find ka eshkat
-    let excluteQuery = ["sort", "fields", "page", "limit", "search"];
+    let excluteQuery = ["sort", "fields", "page", "limit", "search", "id"];
     //bo nwsyny gte ...
     query = query.replace(/\b(gte|gt|lt|lte)\b/g, (match) => `$${match}`);
 
@@ -20,6 +20,9 @@ export const getProducts = async (req, res) => {
       queryObj.fullName = new RegExp(req.query.search, "i");
     }
 
+    if (req.query.id) {
+      queryObj._id = req.query.id;
+    }
     const getQuery = Products.find(queryObj)
       .populate("brand", "name")
       .populate("category", "name");
@@ -30,6 +33,8 @@ export const getProducts = async (req, res) => {
     if (req.query.sort) {
       getQuery.sort(req.query.sort);
     }
+    //id
+
     //ama bo awaya ka tanha datay aw row wana bgarenetawa ka yawtate bo nmwna name image price
     if (req.query.fields) {
       getQuery.select(req.query.fields);

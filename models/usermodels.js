@@ -10,7 +10,7 @@ const usersSchema = new mongoose.Schema(
       unique: true,
     },
     firstName: { type: String, require: true, minLength: 2 },
-    firstLast: { type: String, require: true, minLength: 2 },
+    lastName: { type: String, require: true, minLength: 2 },
     phoneNumber: { type: String, require: true },
     gender: { type: String, require: true },
     role: { type: String, default: "customer" },
