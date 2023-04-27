@@ -7,7 +7,12 @@ import {
   getProducts,
   updateProduct,
 } from "../controllers/productControllers.js";
-import { uploadSingle } from "../middlewares/multerMiddleware.js";
+import {
+  resizeImage,
+  resizeImages,
+  uploadMulti,
+  uploadSingle,
+} from "../middlewares/multerMiddleware.js";
 
 /**
  * @swagger
@@ -120,11 +125,11 @@ router
   .get(getSingleProduct)
   .patch(updateProduct)
   .delete(deleteProduct);
-router.route("/upload").post(uploadSingle, (req, res) => {
+router.route("/upload").post(uploadSingle, resizeImage, (req, res) => {
   res.send(req.file.filename);
 });
-router.route("/upload-multi").post(uploadSingle, (req, res) => {
-  res.json({ message: "succese" });
+router.route("/upload-multi").post(uploadMulti, resizeImages, (req, res) => {
+  res.send(req.body.files);
 });
 
 export default router;
