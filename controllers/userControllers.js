@@ -6,7 +6,17 @@ import { tryCatch } from "../utilts/tryCatch.js";
 
 export const signup = async (req, res) => {
   try {
-    res.status(200).json({ status: "success", data: req.body });
+    req.login(req.user, { session: false }, async (error) => {
+      if (error) return next(error);
+
+      const body = { sub: req.user._id, email: req.user.email };
+      const token = jwt.sign({ user: body }, process.env.JWT_SECRET, {
+        expiresIn: "7 days",
+      });
+      res
+        .status(200)
+        .json({ status: "success", data: { user: req.body, token } });
+    });
   } catch (err) {
     res.status(400).json({ status: "error", message: err.message });
   }
