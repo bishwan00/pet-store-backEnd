@@ -45,7 +45,7 @@ export const login = (req, res, next) => {
         const token = jwt.sign({ user: body }, process.env.JWT_SECRET, {
           expiresIn: "7 days",
         });
-        res.json({ token });
+        res.json({ user, token });
       });
     } catch (err) {
       next(err);
