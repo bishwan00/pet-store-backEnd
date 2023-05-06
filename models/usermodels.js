@@ -15,6 +15,7 @@ const usersSchema = new mongoose.Schema(
     gender: { type: String, require: true },
     role: { type: String, default: "customer" },
     password: { type: String, require: true, minLength: 8 },
+    order: [{ type: mongoose.Types.ObjectId, ref: "order", require: true }],
   },
   { timestamps: true }
 );

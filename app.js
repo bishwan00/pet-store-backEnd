@@ -3,6 +3,7 @@ import path from "path";
 import productRoutes from "./routers/productRouters.js";
 import categoryRoutes from "./routers/categoryRouters.js";
 import brandsRoutes from "./routers/brandRouters.js";
+import orderRouters from "./routers/orderRouters.js";
 import userRoutes from "./routers/userRouters.js";
 import morgan from "morgan";
 import dotenv from "dotenv";
@@ -28,7 +29,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/brands", brandsRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/orders", orderRouters);
 app.use(errorHandler);
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
