@@ -6,6 +6,7 @@ import {
   getSingleProduct,
   getProducts,
   updateProduct,
+  addRate,
 } from "../controllers/productControllers.js";
 import {
   resizeImage,
@@ -128,6 +129,7 @@ router
 router.route("/upload").post(uploadSingle, resizeImage, (req, res) => {
   res.send(req.file.filename);
 });
+router.route("/add-rate/:id").patch(addRate);
 router.route("/upload-multi").post(uploadMulti, resizeImages, (req, res) => {
   res.send(req.body.files);
 });

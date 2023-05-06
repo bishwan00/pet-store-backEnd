@@ -69,6 +69,25 @@ export const deleteProduct = async (req, res) => {
   res.status(200).json({ stastus: "success", message: "delete product" });
 };
 
+export const addRate = async (req, res) => {
+  try {
+    console.log("kjhbj");
+    const product = await Products.findByIdAndUpdate(
+      req.params.id,
+      { $push: { rate: req.body.rate } },
+      { new: true }
+    );
+
+    if (!product) {
+      throw new CustomError("product not found", 404);
+    }
+
+    res.json({ status: "success", data: product });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const addProduct = async (req, res) => {
   try {
     const data = await Products.create(req.body);

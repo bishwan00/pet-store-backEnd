@@ -8,6 +8,7 @@ const productsSchema = new mongoose.Schema(
     image: { type: String, require: true },
     details: String,
     isActive: { type: Boolean, default: false },
+    rate: { type: Array, default: 0 },
     brand: { type: mongoose.Types.ObjectId, ref: "brand", require: true },
     category: [
       { type: mongoose.Types.ObjectId, ref: "category", require: true },
