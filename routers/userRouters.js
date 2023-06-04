@@ -3,6 +3,7 @@ import {
   getCurrentUser,
   getUser,
   login,
+  loginAdmin,
   signup,
 } from "../controllers/userControllers.js";
 import {
@@ -17,6 +18,9 @@ router.route("/").get(protect, checkRole("admin"), getUser);
 router.route("/signup").post(signUpMiddleware, signup);
 router.route("/currentuser").get(protect, getCurrentUser);
 router.post("/login", login);
+
+router.route("/login-admin").post(loginAdmin);
+
 // router
 //   .route("/:id")
 //   .get(getSingleProduct)

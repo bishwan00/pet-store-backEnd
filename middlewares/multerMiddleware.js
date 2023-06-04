@@ -36,7 +36,7 @@ export const resizeImage = async (req, res, next) => {
 
 export const resizeImages = async (req, res, next) => {
   if (!req.files) {
-    next();
+    return next();
   }
   req.body.files = [];
   for (let i = 0; i < req.files.length; i++) {

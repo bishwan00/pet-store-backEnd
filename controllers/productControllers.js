@@ -102,9 +102,17 @@ export const addProduct = async (req, res) => {
     //   { $push: { product: data._id } },
     //   { new: true }
     // );
-    for (const categoryId of req.body.category) {
+    if (req.body.category > 1) {
+      for (const categoryId of req.body.category) {
+        await Category.findByIdAndUpdate(
+          categoryId,
+          { $push: { product: data._id } },
+          { new: true }
+        );
+      }
+    } else {
       const category = await Category.findByIdAndUpdate(
-        categoryId,
+        req.body.category,
         { $push: { product: data._id } },
         { new: true }
       );

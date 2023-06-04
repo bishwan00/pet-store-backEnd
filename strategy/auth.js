@@ -61,7 +61,37 @@ passport.use(
     }
   )
 );
+passport.use(
+  "loginAdmin",
+  new localStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({
+          email,
+        });
 
+        if (!user) {
+          return done(null, false, { message: "invalid Credential" });
+        }
+        if (user.role !== "admin") {
+          return done(null, false, { message: "invalid Credential" });
+        }
+
+        const validate = await user.isValidePassword(password);
+        if (!validate)
+          return done(null, false, { message: "invalid Credential" });
+
+        return done(null, user);
+      } catch (error) {
+        done(error);
+      }
+    }
+  )
+);
 passport.use(
   new JWTStrategy(
     {

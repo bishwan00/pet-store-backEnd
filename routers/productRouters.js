@@ -14,6 +14,7 @@ import {
   uploadMulti,
   uploadSingle,
 } from "../middlewares/multerMiddleware.js";
+import { checkRole, protect } from "../middlewares/authMiddleware.js";
 
 /**
  * @swagger
@@ -126,9 +127,11 @@ router
   .get(getSingleProduct)
   .patch(updateProduct)
   .delete(deleteProduct);
-router.route("/upload").post(uploadSingle, resizeImage, (req, res) => {
-  res.send(req.file.filename);
-});
+router
+  .route("/upload")
+  .post(protect, checkRole("admin"), uploadSingle, resizeImage, (req, res) => {
+    res.json({ path: `products/${req.file.filename}` });
+  });
 router.route("/add-rate/:id").patch(addRate);
 router.route("/upload-multi").post(uploadMulti, resizeImages, (req, res) => {
   res.send(req.body.files);
