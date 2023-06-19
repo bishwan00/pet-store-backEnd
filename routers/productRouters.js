@@ -3,7 +3,6 @@ import { Router } from "express";
 import {
   addProduct,
   deleteProduct,
-  getSingleProduct,
   getProducts,
   updateProduct,
   addRate,
@@ -122,11 +121,7 @@ const router = Router();
  *
  */
 router.route("/").get(getProducts).post(addProduct);
-router
-  .route("/:id")
-  .get(getSingleProduct)
-  .patch(updateProduct)
-  .delete(deleteProduct);
+router.route("/:id").patch(updateProduct).delete(deleteProduct);
 router
   .route("/upload")
   .post(protect, checkRole("admin"), uploadSingle, resizeImage, (req, res) => {

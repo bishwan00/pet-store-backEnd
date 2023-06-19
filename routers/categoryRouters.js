@@ -5,7 +5,7 @@ import {
   getCategory,
   registerCategory,
 } from "../controllers/categoryControllers.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { checkRole, protect } from "../middlewares/authMiddleware.js";
 import {
   resizeImageCategory,
   uploadSingle,
