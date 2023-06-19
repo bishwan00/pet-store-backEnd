@@ -8,7 +8,7 @@ import {
   resizeImageBrand,
   uploadSingle,
 } from "../middlewares/multerMiddleware.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { checkRole, protect } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
