@@ -14,8 +14,11 @@ export const addCategory = async (req, res) => {
 export const getCategory = async (req, res) => {
   try {
     const category = await Category.find().populate("product", "fullName");
+    const count = await category.clone().count();
 
-    res.status(201).json({ status: "success", data: category });
+    res
+      .status(201)
+      .json({ status: "success", data: category, numberOfCategory: count });
   } catch (err) {
     res.status(400).json({ status: "error", message: err.message });
   }
@@ -40,5 +43,35 @@ export const registerCategory = async (req, res) => {
     res.json({ status: "success", data: category });
   } catch (err) {
     res.status(400).json({ status: "error", message: err.message });
+  }
+};
+
+
+export const deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+
+    // Find the category by ID and delete it
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+    if (!deletedCategory) {
+      // If the category is not found, return an error response
+      return res
+        .status(404)
+        .json({ status: "error", message: "Category not found" });
+    }
+
+    // Remove the category reference from related products
+    await Product.updateMany(
+      { category: categoryId },
+      { $pull: { category: categoryId } }
+    );
+
+    // Return success response
+    res
+      .status(200)
+      .json({ status: "success", message: "Category deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };

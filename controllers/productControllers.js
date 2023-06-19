@@ -57,21 +57,12 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getSingleProduct = (req, res) => {
-  res.status(200).json({ stastus: "success", message: "get single product" });
-};
-
 export const updateProduct = async (req, res) => {
   res.status(200).json({ stastus: "success", message: "update product" });
 };
 
-export const deleteProduct = async (req, res) => {
-  res.status(200).json({ stastus: "success", message: "delete product" });
-};
-
 export const addRate = async (req, res) => {
   try {
-    console.log("kjhbj");
     const product = await Products.findByIdAndUpdate(
       req.params.id,
       { $push: { rate: req.body.rate } },
@@ -125,5 +116,38 @@ export const addProduct = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ status: "error", message: err.message });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Find the product by ID and delete it
+    const deletedProduct = await Products.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      // If the product is not found, return an error response
+      return res
+        .status(404)
+        .json({ status: "error", message: "Product not found" });
+    }
+
+    // Remove the product reference from related models (e.g., brand and category)
+    await Brand.updateOne(
+      { _id: deletedProduct.brand },
+      { $pull: { product: deletedProduct._id } }
+    );
+    await Category.updateMany(
+      { _id: { $in: deletedProduct.category } },
+      { $pull: { product: deletedProduct._id } }
+    );
+
+    // Return success response
+    res
+      .status(200)
+      .json({ status: "success", message: "Product deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };

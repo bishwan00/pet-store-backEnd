@@ -33,6 +33,36 @@ export const resizeImage = async (req, res, next) => {
     .toFile(`uploads/products/${req.file.filename}`);
   next();
 };
+export const resizeImageBrand = async (req, res, next) => {
+  if (!req.file) {
+    next();
+  }
+
+  req.file.filename = `brand-${Date.now()}-${Math.random(
+    Math.random * 10000
+  )}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`uploads/brands/${req.file.filename}`);
+  next();
+};
+export const resizeImageCategory = async (req, res, next) => {
+  if (!req.file) {
+    next();
+  }
+
+  req.file.filename = `category-${Date.now()}-${Math.random(
+    Math.random * 10000
+  )}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`uploads/categories/${req.file.filename}`);
+  next();
+};
 
 export const resizeImages = async (req, res, next) => {
   if (!req.files) {
