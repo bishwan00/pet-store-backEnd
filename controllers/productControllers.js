@@ -7,7 +7,16 @@ export const getProducts = async (req, res) => {
     let query = JSON.stringify(req.query);
 
     //ama bo awaya la req.query kaya bysrynawa boy find ka eshkat
-    let excluteQuery = ["sort", "fields", "page", "limit", "search", "id"];
+    let excluteQuery = [
+      "sort",
+      "fields",
+      "page",
+      "limit",
+      "search",
+      "id",
+      "brand",
+      "category",
+    ];
     //bo nwsyny gte ...
     query = query.replace(/\b(gte|gt|lt|lte)\b/g, (match) => `$${match}`);
 
@@ -22,6 +31,18 @@ export const getProducts = async (req, res) => {
 
     if (req.query.id) {
       queryObj._id = req.query.id;
+    }
+    if (req.query.brand) {
+      const brand = await Brand.findOne({ name: req.query.brand });
+      if (brand) {
+        queryObj.brand = brand._id;
+      }
+    }
+    if (req.query.category) {
+      const category = await Category.findOne({ name: req.query.category });
+      if (category) {
+        queryObj.category = category._id;
+      }
     }
     const getQuery = Products.find(queryObj)
       .populate("brand", "name")
@@ -39,6 +60,7 @@ export const getProducts = async (req, res) => {
     if (req.query.fields) {
       getQuery.select(req.query.fields);
     }
+
     const page = req.query.page || 1;
     const limit = req.query.limit || 15;
 

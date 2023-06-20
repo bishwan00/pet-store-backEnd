@@ -14,7 +14,7 @@ export const addCategory = async (req, res) => {
 export const getCategory = async (req, res) => {
   try {
     const category = await Category.find().populate("product", "fullName");
-    const count = await category.clone().count();
+    const count = await category.length;
 
     res
       .status(201)
@@ -45,7 +45,6 @@ export const registerCategory = async (req, res) => {
     res.status(400).json({ status: "error", message: err.message });
   }
 };
-
 
 export const deleteCategory = async (req, res) => {
   try {

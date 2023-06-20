@@ -14,7 +14,7 @@ export const addBrand = async (req, res) => {
 export const getBrand = async (req, res) => {
   try {
     const brand = await Brand.find().populate("product");
-    const count = await brand.clone().count();
+    const count = await brand.length;
 
     res
       .status(201)
